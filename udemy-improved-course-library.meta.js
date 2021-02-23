@@ -1,19 +1,18 @@
 // ==UserScript==
 // @name         Udemy - Improved Course Library
-// @namespace    https://github.com/TadWohlrapp/UserScripts
-// @description  Shows rating, number of reviews and number of students enrolled for all courses in your library
-// @icon         https://github.com/TadWohlrapp/UserScripts/raw/master/udemy-improved-course-library/icon.png
-// @icon64       https://github.com/TadWohlrapp/UserScripts/raw/master/udemy-improved-course-library/icon64.png
-// @author       Tad Wohlrapp <tadwohlrapp@gmail.com>
-// @homepageURL  https://github.com/TadWohlrapp/UserScripts/tree/master/udemy-improved-course-library
-// @version      0.6.0
-// @updateURL    https://github.com/TadWohlrapp/UserScripts/raw/master/udemy-improved-course-library/udemy-improved-course-library.meta.js
-// @downloadURL  https://github.com/TadWohlrapp/UserScripts/raw/master/udemy-improved-course-library/udemy-improved-course-library.user.js
-// @supportURL   https://github.com/TadWohlrapp/UserScripts/issues
+// @namespace    https://github.com/TadWohlrapp
+// @description  Shows ratings and other additional info for all courses in your Udemy library
+// @icon         https://github.com/TadWohlrapp/Udemy-Improved-Library-Userscript/raw/main/icon.png
+// @icon64       https://github.com/TadWohlrapp/Udemy-Improved-Library-Userscript/raw/main/icon64.png
+// @author       Tad Wohlrapp (https://github.com/TadWohlrapp)
+// @homepageURL  https://github.com/TadWohlrapp/Udemy-Improved-Library-Userscript
+// @version      1.0.0
+// @updateURL    https://github.com/TadWohlrapp/Udemy-Improved-Library-Userscript/raw/main/udemy-improved-course-library.meta.js
+// @downloadURL  https://github.com/TadWohlrapp/Udemy-Improved-Library-Userscript/raw/main/udemy-improved-course-library.user.js
+// @supportURL   https://github.com/TadWohlrapp/Udemy-Improved-Library-Userscript/issues
 // @match        https://www.udemy.com/home/my-courses/*
-// @compatible   chrome Tested with Tampermonkey v4.9 and Violentmonkey v2.12.7
+// @compatible   chrome Tested with Tampermonkey v4.11 and Violentmonkey v2.12.9
 // @compatible   firefox Tested with Greasemonkey v4.9
-// @copyright    2020, Tad Wohlrapp (https://github.com/TadWohlrapp/UserScripts)
 // @license      MIT
 // ==/UserScript==
 
