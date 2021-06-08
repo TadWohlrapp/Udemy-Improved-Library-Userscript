@@ -1,18 +1,18 @@
 // ==UserScript==
 // @name         Udemy - Improved Course Library
 // @namespace    https://github.com/TadWohlrapp
-// @description  Shows ratings and other additional info for all courses in your Udemy library
+// @description  Adds current ratings, and other detailed data to all courses in your Udemy library
 // @icon         https://github.com/TadWohlrapp/Udemy-Improved-Library-Userscript/raw/main/icon.png
 // @icon64       https://github.com/TadWohlrapp/Udemy-Improved-Library-Userscript/raw/main/icon64.png
 // @author       Tad Wohlrapp (https://github.com/TadWohlrapp)
 // @homepageURL  https://github.com/TadWohlrapp/Udemy-Improved-Library-Userscript
-// @version      1.0.0
+// @version      1.0.1
 // @updateURL    https://github.com/TadWohlrapp/Udemy-Improved-Library-Userscript/raw/main/udemy-improved-course-library.meta.js
 // @downloadURL  https://github.com/TadWohlrapp/Udemy-Improved-Library-Userscript/raw/main/udemy-improved-course-library.user.js
 // @supportURL   https://github.com/TadWohlrapp/Udemy-Improved-Library-Userscript/issues
 // @match        https://www.udemy.com/home/my-courses/*
-// @compatible   chrome Tested with Tampermonkey v4.11 and Violentmonkey v2.12.9
-// @compatible   firefox Tested with Greasemonkey v4.9
+// @compatible   chrome Tested with Tampermonkey v4.13 and Violentmonkey v2.13.0
+// @compatible   firefox Tested with Greasemonkey v4.11
 // @license      MIT
 // ==/UserScript==
 
@@ -44,19 +44,21 @@
 
       // Add Link to course overview to options dropdown
       const courseLinkLi = document.createElement('li');
-      courseLinkLi.setAttribute('role', 'presentation');
-      courseLinkLi.classList.add('custom-course-link', 'js-removepartial');
       courseLinkLi.innerHTML = `
-        <a role="menuitem" tabindex="-1" href="https://www.udemy.com/course/${courseId}/" target="_blank" rel="noopener">
-          <span class="udi-small udi udi-explore"></span>
-          <span class="card__course-link">${i18n[lang].overview}</span>
-          <svg fill="#686f7a" width="12" height="16" viewBox="0 0 24 24" style="vertical-align: bottom;" xmlns="http://www.w3.org/2000/svg">
-            <path d="M19 19H5V5h7V3H5a2 2 0 00-2 2v14c0 1.1.9 2 2 2h14a2 2 0 002-2v-7h-2v7zM14 3v2h3.6l-9.8 9.8 1.4 1.4L19 6.4V10h2V3h-7z"></path>
-          </svg>
+        <a class="udlite-btn udlite-btn-large udlite-btn-ghost udlite-text-sm udlite-block-list-item udlite-block-list-item-small udlite-block-list-item-neutral" role="menuitem" tabindex="-1" href="https://www.udemy.com/course/${courseId}/" target="_blank" rel="noopener">
+          <span class="udi-small udi udi-explore udlite-block-list-item-icon"></span>
+          <div class="udlite-block-list-item-content card__course-link">${i18n[lang].overview}
+            <svg fill="#686f7a" width="12" height="16" viewBox="0 0 24 24" style="vertical-align: bottom; margin-left: 5px;" xmlns="http://www.w3.org/2000/svg">
+              <path d="M19 19H5V5h7V3H5a2 2 0 00-2 2v14c0 1.1.9 2 2 2h14a2 2 0 002-2v-7h-2v7zM14 3v2h3.6l-9.8 9.8 1.4 1.4L19 6.4V10h2V3h-7z"></path>
+            </svg>
+          </div>
         </a>
       `;
-      const dropdownUl = courseContainer.querySelector('.dropdown-menu');
-      dropdownUl.appendChild(courseLinkLi);
+
+      const allDropdowns = courseContainer.querySelectorAll('.udlite-block-list');
+      if (allDropdowns[1]) {
+        allDropdowns[1].appendChild(courseLinkLi);;
+      }
 
       // Find existing elements in DOM
       const thumbnailDiv = courseContainer.querySelector('.card__image');
@@ -427,43 +429,43 @@
       box-shadow: 0 0 1px 1px rgba(20, 23, 28, 0.1), 0 3px 1px 0 rgba(20, 23, 28, 0.1);
       transition: all 100ms linear;
     }
-    
+
     .card--learning:hover {
       box-shadow: 0 2px 8px 2px rgba(20, 23, 28, 0.15);
     }
-    
+
     .card--learning:before {
       content: none;
     }
-    
+
     .card--learning:after {
       content: none;
     }
-    
+
     .card__image {
       overflow: inherit;
     }
-    
+
     .card__image .course-image {
       transition: opacity linear 100ms;
       box-shadow: 0 1px 0 0 rgba(232, 233, 235, 0.5);
       -webkit-filter: sepia(0.1) grayscale(0.1) saturate(0.8);
       filter: sepia(0.1) grayscale(0.1) saturate(0.8);
     }
-    
+
     a:hover .card__image .course-image {
       opacity: 0.8;
     }
-    
+
     .card--learning__details {
       border-top: 1px solid #e8e9eb;
     }
-    
+
     .card__details {
       padding: 12px;
       height: 66px;
     }
-    
+
     .impr__name {
       font-weight: 700;
       line-height: 1.2;
@@ -474,7 +476,7 @@
       -webkit-box-orient: vertical;
       overflow: hidden;
     }
-    
+
     .impr__instructor {
       color: #73726c;
       overflow: hidden;
@@ -483,12 +485,12 @@
       margin-top: 4px;
       font-size: 12px;
     }
-    
+
     span[class^="leave-rating--helper-text"] {
       font-size: 10px;
       white-space: nowrap;
     }
-    
+
     .card__thumb-overlay {
       position: absolute;
       display: inline-block;
@@ -499,18 +501,22 @@
       border-radius: 2px;
       transition: opacity linear 100ms;
     }
-    
+
+    .card__course-link {
+      font-size: 1.4rem;
+    }
+
     .card__course-runtime {
       bottom: 0;
       right: 0;
       background-color: rgba(20, 30, 46, 0.75);
       color: #ffffff;
     }
-    
+
     .impr__progress-bar~.card__course-runtime {
       bottom: 4px;
     }
-    
+
     .card__course-locale {
       top: 0;
       left: 0;
@@ -519,23 +525,23 @@
       color: #29303b;
       font-weight: 600;
     }
-    
+
     .play-button-trigger .hover-hide {
       opacity: 1;
     }
-    
+
     .play-button-trigger .hover-show {
       opacity: 0;
     }
-    
+
     .play-button-trigger:hover .hover-hide {
       opacity: 0;
     }
-    
+
     .play-button-trigger:hover .hover-show {
       opacity: 1;
     }
-    
+
     .impr__progress-bar {
       display: block;
       position: absolute;
@@ -545,33 +551,33 @@
       height: 5px;
       background: rgba(20, 30, 46, 0.75);
     }
-    
+
     .impr__progress-bar .progress__bar {
       background: #69c1d0 !important;
     }
-    
+
     .card__custom {
       font-size: 12px;
       color: #686f7a;
       height: 85px;
     }
-    
+
     .impr__rating {
       padding: 0 12px;
       height: 48px;
     }
-    
+
     .impr__rating-strip {
       height: 5px;
     }
-    
+
     .impr__stats {
       font-weight: 500;
       padding: 5px 12px;
       line-height: 1.7;
       display: flex;
     }
-    
+
     .impr__stats>div {
       display: inline-block;
       background: #f7f8fa;
@@ -581,36 +587,36 @@
       border: 1px solid #e7e7e8;
       cursor: default;
     }
-    
+
     .impr__stats .udi {
       opacity: 0.75;
       vertical-align: middle;
     }
-    
+
     .impr__stats .udi:not(:last-child) {
       margin-right: 4px;
     }
-    
+
     .impr__star-own {
       font-size: 16px;
       margin-right: 2px;
     }
-    
+
     .card__stars {
       display: inline-block;
       width: 7rem;
       height: 1.6rem;
       vertical-align: text-bottom;
     }
-    
+
     .card__star--bordered {
       stroke: #eb8a2f;
     }
-    
+
     .card__star--filled {
       fill: #eb8a2f;
     }
-    
+
     .card__rating-text {
       font-weight: 700;
       color: #505763;
@@ -618,7 +624,7 @@
       margin-right: 6px;
       font-size: 14px;
     }
-    
+
     .impr__icon {
       width: 12px;
       height: 15px;
@@ -627,7 +633,7 @@
       margin-right: 4px;
       opacity: 0.75;
     }
-    
+
     .card__nodata {
       font-size: 13px;
       display: flex;
@@ -640,11 +646,11 @@
       background: #fbf4f4;
       color: #521822;
     }
-    
+
     .impr__rating-all {
       height: 20px;
     }
-    
+
     .impr__rating-btn {
       position: relative;
       height: 20px;
@@ -652,28 +658,28 @@
       align-items: center !important;
       justify-content: flex-end;
     }
-    
+
     .impr__rating-btn>.impr__rating-own {
       position: absolute;
     }
-    
+
     .impr__rating-btn.is-rated>span {
       opacity: 0;
     }
-    
+
     .impr__rating-btn.is-rated:hover>span {
       opacity: 1;
     }
-    
+
     .impr__rating-btn.is-rated:hover>.impr__rating-own {
       opacity: 0;
     }
-    
+
     .impr__tooltip {
       display: inline;
       position: relative;
     }
-    
+
     .impr__tooltip:hover:after {
       display: flex;
       justify-content: center;
@@ -688,7 +694,7 @@
       z-index: 10;
       white-space: pre;
     }
-    
+
     .impr__tooltip:hover:before {
       border: solid;
       border-color: #4f5662 transparent;
@@ -699,70 +705,70 @@
       bottom: -4px;
       position: absolute;
     }
-    
+
     .impr__stars-ct {
       margin: 0;
       padding: 4px 0 0;
       display: flex;
     }
-    
+
     .impr__stars {
       font-size: 13px;
       display: inline-block;
       white-space: nowrap;
     }
-    
+
     .impr__stars div {
       display: inline-block;
       position: relative;
     }
-    
+
     .impr__star {
       top: 0;
       left: 0;
     }
-    
+
     .impr__star:before {
       font-family: udemyicons;
       display: inline-block;
       position: relative;
       line-height: 1;
     }
-    
+
     .impr__star--unfilled {
       position: relative;
     }
-    
+
     .impr__star--unfilled:before {
       z-index: 0;
       content: "\\F005";
       color: #dedfe0;
     }
-    
+
     .impr__star--filled {
       position: absolute;
       overflow: hidden;
     }
-    
+
     .impr__star--filled:before {
       z-index: 1;
       content: "\\F005";
       color: #f4c150;
     }
-    
+
     .impr__review {
       margin-left: 5px;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
-    
+
     .impr__review-stat {
       font-weight: 700;
       font-size: 13px;
       color: #505763;
     }
-    
+
     .impr__review-count {
       font-weight: 400;
       color: #686f7a;
